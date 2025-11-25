@@ -8,6 +8,11 @@
 
 </div>
 
+<div align="center">
+
+简体中文 | [English](./README.en.md)
+
+</div>
 
 
 ## 1. 项目背景
