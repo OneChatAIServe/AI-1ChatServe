@@ -1,4 +1,4 @@
-![输入图片说明](img/md_banner2.png)
+![输入图片说明](img/banner1.png)
 
 <div align="center">
 
@@ -182,4 +182,4 @@
 - [Langchain4j](https://github.com/langchain4j/langchain4j)：强大的 Java LLM 开发框架
 ---
 
-![输入图片说明](img/md_banner.png)
+![输入图片说明](img/banner3.png)
