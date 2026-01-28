@@ -14,6 +14,25 @@
 
 </div>
 
+## 0. About the Project
+
+### 0.1 Find Us
+Open source official website (technical documentation)： http://aikf.chat/
+
+Github: https://github.com/OneChatAIServe/AI-1ChatServe
+
+Gitee: https://gitee.com/visualinsur-xbkj/1ChatServe
+
+GitCode: https://gitcode.com/OneChatServe/1ChatServe
+
+### 0.2 Frontend Repository
+Address： https://gitee.com/hixinla/1-chat-serve-front
+
+### 0.3 Online Demo
+Admin Panel: http://demo.aikf.chat (Account: admin , Password: admin123)
+
+User Experience End： http://mobile.aikf.chat
+
 
 ## 1. Project Background
 
