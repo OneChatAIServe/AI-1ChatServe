@@ -16,9 +16,13 @@
 
 ### 重要链接
 - 开源官网(技术文档)：[http://aikf.chat/](http://aikf.chat)
-- 前端代码地址：[https://gitee.com/hixinla/1-chat-serve-front](https://gitee.com/hixinla/1-chat-serve-front)
+- Github: https://github.com/OneChatAIServe/AI-1ChatServe
+- Gitee: https://gitee.com/visualinsur-xbkj/1ChatServe
+- GitCode: https://gitcode.com/OneChatServe/1ChatServe
+### 前端代码
+- 地址：[https://gitee.com/hixinla/1-chat-serve-front](https://gitee.com/hixinla/1-chat-serve-front)
 ### 在线演示
-   - 管理后台:[http://demo.aikf.chat](http://demo.aikf.chat) (账号：admin 密码：admin123)
+   - 管理后台: [http://demo.aikf.chat](http://demo.aikf.chat) (账号：admin 密码：admin123)
    - 用户体验端：[http://mobile.aikf.chat](http://mobile.aikf.chat)
 ## 1. 项目背景
 
