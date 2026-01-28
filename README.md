@@ -19,7 +19,6 @@
 ### 在线演示
    - 管理后台:[http://demo.aikf.chat](http://demo.aikf.chat) (账号：admin 密码：admin123)
    - 用户体验端：[http://mobile.aikf.chat](http://mobile.aikf.chat)
-
 ## 1. 项目背景
 
 在数字化转型的浪潮下，企业面临着诸多严峻挑战：
@@ -152,7 +151,7 @@
 
 ### 7.2 联系方式
 
-*正在搭建官方渠道，敬请期待...*
+<img src="img/wechat.jpg" alt="输入图片说明" width="300" height="auto" />
 
 ## 8. 许可证
 
@@ -165,8 +164,10 @@
 
 ## 9. 致谢
 
-感谢所有为万洽项目做出贡献的开发者和用户，是你们的支持和反馈让项目不断成长和完善。
-
+感谢以下优秀的开源项目为本项目提供支持:
+- [T-IO](https://gitee.com/tywo45/t-io)：基于java aio研发的高性能网络编程框架
+- [RuoYi-Cloud](https://gitee.com/y_project/RuoYi-Cloud)：基于java的成熟的企业级快速开发框架
+- [Langchain4j](https://github.com/langchain4j/langchain4j)：强大的 Java LLM 开发框架
 ---
 
 ![输入图片说明](img/md_banner.png)
