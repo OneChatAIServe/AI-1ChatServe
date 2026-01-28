@@ -1,4 +1,4 @@
-![Banner Image](img/md_banner2.png)
+![Banner Image](img/banner2.png)
 
 <div align="center">
 
@@ -182,4 +182,4 @@ Thank you to all developers and users who have contributed to the 1ChatServe pro
 
 ---
 
-![Bottom Banner](img/md_banner.png)
+![Bottom Banner](img/banner3.png)
