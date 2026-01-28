@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <title>匿名聊天附件上传（带会话认证 + 安全预览）</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        h2 {
+            text-align: center;
+            color: #1890ff;
+        }
+        .step {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:disabled {
+            background: #bfbfbf;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        .success { color: #52c41a; }
+        .error { color: #f5222d; }
+        .upload-area {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            text-align: center;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        .preview {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .preview img {
+            max-width: 100%;
+            max-height: 300px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h2>💬 匿名聊天附件上传（安全预览）</h2>
+
+<!-- 步骤1：识别访客 -->
+<div class="step">
+    <h3>1️⃣ 识别访客身份</h3>
+    <button id="btnIdentify" onclick="identify()">获取访客身份</button>
+    <div id="statusIdentify" class="status"></div>
+</div>
+
+<!-- 步骤2：创建会话 -->
+<div class="step">
+    <h3>2️⃣ 创建会话凭证</h3>
+    <button id="btnSession" onclick="createSession()" disabled>创建会话 Token</button>
+    <div id="statusSession" class="status"></div>
+</div>
+
+<!-- 步骤3：上传文件 -->
+<div class="step upload-area">
+    <h3>3️⃣ 上传附件</h3>
+    <input type="file" id="fileInput" />
+    <br />
+    <button id="btnUpload" onclick="uploadFile()" disabled>上传文件</button>
+    <div id="statusUpload" class="status"></div>
+
+    <!-- 安全预览区 -->
+    <div class="preview">
+        <p>安全预览（需会话 Token）：</p>
+        <img id="securePreview" alt="预览图" />
+    </div>
+</div>
+
+<script>
+    const BASE_URL = 'http://localhost:5728';
+    let sessionToken = null;
+
+    async function identify() {
+        updateStatus('statusIdentify', '正在识别...', '');
+        try {
+            const res = await fetch(`${BASE_URL}/auth/identify`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            if (res.ok) {
+                const data = await res.json();
+                updateStatus('statusIdentify', `✅ 访客ID: ${data.data.visitor_id}`, 'success');
+                document.getElementById('btnSession').disabled = false;
+            } else {
+                throw new Error(await res.text());
+            }
+        } catch (err) {
+            updateStatus('statusIdentify', `❌ ${err.message}`, 'error');
+        }
+    }
+
+    async function createSession() {
+        updateStatus('statusSession', '正在创建会话...', '');
+        try {
+            const res = await fetch(`${BASE_URL}/auth/session`, {
+                method: 'POST',
+                credentials: 'include'
+            });
+            if (res.ok) {
+                const data = await res.json();
+                sessionToken = data.data.session_token;
+                updateStatus('statusSession', '✅ 会话凭证已创建', 'success');
+                document.getElementById('btnUpload').disabled = false;
+            } else {
+                throw new Error(await res.text());
+            }
+        } catch (err) {
+            updateStatus('statusSession', `❌ ${err.message}`, 'error');
+        }
+    }
+
+    async function uploadFile() {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        if (!file) {
+            alert('请选择一个文件！');
+            return;
+        }
+
+        updateStatus('statusUpload', '正在上传...', '');
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const res = await fetch(`${BASE_URL}/file/chatUpload`, {
+                method: 'POST',
+                headers: {
+                    'C-Auth-Token': 'Bearer ' + sessionToken
+                },
+                body: formData,
+            });
+
+            const result = await res.json();
+            if (res.ok && result.code === 200) {
+                const url = result.data.url;
+                updateStatus('statusUpload', `✅ 上传成功！<br/>文件路径: ${url}`, 'success');
+
+                // 👇 尝试安全预览（仅当是图片时）
+                if (isImageUrl(url)) {
+                    loadSecureImage(url);
+                }
+            } else {
+                throw new Error(result.msg || '上传失败');
+            }
+        } catch (err) {
+            console.error('上传错误:', err);
+            updateStatus('statusUpload', `❌ ${err.message}`, 'error');
+        }
+    }
+
+    // 判断是否为图片 URL
+    function isImageUrl(url) {
+        const imgExts = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+        const lowerUrl = url.toLowerCase();
+        return imgExts.some(ext => lowerUrl.endsWith(ext));
+    }
+
+    // 安全加载图片（通过带 Token 的 fetch）
+    async function loadSecureImage(imageUrl) {
+        const imgEl = document.getElementById('securePreview');
+        imgEl.style.display = 'none'; // 先隐藏
+
+        try {
+            // 直接请求原始图片 URL（如 http://localhost:5728/profile/upload/2025/.../abc.jpg）
+            const res = await fetch(imageUrl, {
+                method: 'GET',
+                headers: {
+                    'C-Auth-Token': 'Bearer ' + sessionToken
+                }
+            });
+
+            if (!res.ok) {
+                throw new Error('加载图片失败: ' + res.status);
+            }
+
+            const blob = await res.blob();
+            const imgUrl = URL.createObjectURL(blob);
+            imgEl.src = imgUrl;
+            imgEl.style.display = 'inline-block';
+        } catch (err) {
+            console.error('安全预览失败:', err);
+            imgEl.alt = '预览失败: ' + (err.message || '未知错误');
+            imgEl.style.display = 'inline-block';
+        }
+    }
+
+    function updateStatus(id, message, type = '') {
+        const el = document.getElementById(id);
+        el.innerHTML = message;
+        el.className = 'status ' + type;
+    }
+</script>
+
+</body>
+</html>

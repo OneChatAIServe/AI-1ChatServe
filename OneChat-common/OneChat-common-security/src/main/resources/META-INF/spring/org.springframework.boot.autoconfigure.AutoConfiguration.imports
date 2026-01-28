@@ -1,0 +1,7 @@
+chat.aikf.common.security.config.WebMvcConfig
+chat.aikf.common.security.service.TokenService
+chat.aikf.common.security.aspect.PreAuthorizeAspect
+chat.aikf.common.security.aspect.InnerAuthAspect
+chat.aikf.common.security.handler.GlobalExceptionHandler
+chat.aikf.common.security.handler.DbBaseMetaObjectHandler
+chat.aikf.common.security.service.GuestIdentityService

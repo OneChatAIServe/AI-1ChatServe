@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chat.aikf.ops.mapper.OneChatKfRuleScopeMapper">
+
+    <select id="findOneChatKfRuleScopeByRuleId" resultType="chat.aikf.ops.api.domain.OneChatKfRuleScope">
+        SELECT
+            onkr.id,
+            onkr.user_id,
+            onkr.nick_name,
+            onkr.upper_limit,
+            onkr.kf_rule_id,
+            onkr.user_account,
+            onkr.create_by,
+            onkr.create_time,
+            onkr.update_time,
+            onkr.update_by,
+            su.user_name,
+            onkr.kf_status as status,
+            onkr.avatar
+        FROM
+            one_chat_kf_rule_scope onkr
+                LEFT JOIN sys_user su ON onkr.user_id = su.user_id
+        WHERE
+            onkr.del_flag = '0'
+          AND su.del_flag = '0' and onkr.kf_rule_id=#{ruleId}
+    </select>
+</mapper>

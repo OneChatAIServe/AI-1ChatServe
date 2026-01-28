@@ -1,0 +1,3 @@
+chat.aikf.system.api.factory.RemoteUserFallbackFactory
+chat.aikf.system.api.factory.RemoteLogFallbackFactory
+chat.aikf.system.api.factory.RemoteFileFallbackFactory

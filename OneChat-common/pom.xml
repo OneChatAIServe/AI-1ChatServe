@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>chat.aikf</groupId>
+        <artifactId>OneChatServe-api</artifactId>
+        <version>3.6.6</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>OneChat-common-log</module>
+        <module>OneChat-common-core</module>
+        <module>OneChat-common-redis</module>
+        <module>OneChat-common-security</module>
+        <module>OneChat-common-sensitive</module>
+        <module>OneChat-common-datascope</module>
+        <module>OneChat-common-datasource</module>
+        <module>OneChat-common-mq</module>
+    </modules>
+
+    <artifactId>OneChat-common</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        OneChat-common通用模块
+    </description>
+
+</project>

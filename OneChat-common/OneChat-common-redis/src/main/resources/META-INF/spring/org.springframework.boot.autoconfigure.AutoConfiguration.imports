@@ -1,0 +1,2 @@
+chat.aikf.common.redis.configure.RedissonConfig
+chat.aikf.common.redis.service.RedisService

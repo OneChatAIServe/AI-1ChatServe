@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chat.aikf.ops.mapper.OneChatkfVisitorMapper">
+
+
+    <select id="findList" resultType="chat.aikf.ops.api.domain.OneChatkfVisitor">
+        SELECT
+            ockv.id,
+            ockv.name,
+            ockv.ipaddr,
+            ockv.current_view_time,
+            ockv.first_view_time,
+            ockv.view_number,
+            ockv.channel_type,
+            ockv.view_device,
+            ockv.view_os,
+            ockv.ip_real_addr,
+            ockv.view_language,
+            ockv.view_browser,
+            ockv.current_state,
+            ockv.create_by,
+            ockv.create_time,
+            ockv.visitor_id,
+            ockv.update_by,
+            ockv.update_time,
+            ockv.avatar,
+            (SELECT GROUP_CONCAT(oct.tag_name) from one_chat_kf_visitor_tag_rel ockvr LEFT JOIN one_chat_tag oct ON  ockvr.tag_id=oct.id
+            where ockvr.kf_visitor_id=ockv.id and ockvr.del_flag='0' AND oct.del_flag='0'
+            )  as tagNames,
+            (SELECT GROUP_CONCAT(oct.id) from one_chat_kf_visitor_tag_rel ockvr LEFT JOIN one_chat_tag oct ON  ockvr.tag_id=oct.id
+            where ockvr.kf_visitor_id=ockv.id and ockvr.del_flag='0' AND oct.del_flag='0'
+            )  as tagIds
+        FROM
+            one_chat_kf_visitor ockv
+        WHERE
+            ockv.del_flag='0'
+            <if test="visitor.id !=null">
+                and ockv.id=#{visitor.id}
+            </if>
+            <if test="visitor.name !=null and visitor.name !=''">
+               and  ockv.`name`  LIKE CONCAT('%',#{visitor.name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="visitor.channelType !=null">
+                and ockv.channel_type=#{visitor.channelType}
+            </if>
+            <if test="visitor.userAccount !=null and visitor.userAccount !=''">
+                and ockv.user_account=#{visitor.userAccount}
+            </if>
+        <if test="visitor.currentState !=null">
+            and ockv.current_state=#{visitor.currentState}
+        </if>
+    </select>
+
+    <select id="countOneChatKfCsStats" resultType="chat.aikf.ops.domain.OneChatKfCsStatsVO">
+        SELECT
+            COUNT(*) AS totalHandled,
+            COALESCE(SUM(
+                             CASE
+                                 WHEN DATE(update_time) = CURDATE() THEN 1
+                             ELSE 0
+                             END
+                     ), 0) AS todayHandled,
+            COALESCE(SUM(
+                             CASE
+                                 WHEN current_state = 0 THEN 1
+                                 ELSE 0
+                                 END
+                     ), 0) AS queuing,
+
+            COALESCE(SUM(
+                             CASE
+                                 WHEN current_state = 1 THEN 1
+                                 ELSE 0
+                                 END
+                     ), 0) AS chatting,
+            COALESCE(SUM(
+                             CASE
+                                 WHEN current_state = 2 THEN 1
+                                 ELSE 0
+                                 END
+                     ), 0) AS ended
+        FROM one_chat_kf_visitor
+        WHERE del_flag = '0'
+    </select>
+
+
+    <select id="countOneChatKfTrendVo" resultType="chat.aikf.ops.domain.OneChatKfTrendVO">
+        SELECT
+            sd.DATE AS countDate,
+            (SELECT count(oc.visitor_id) from one_chat_kf_visitor oc where DATE_FORMAT(oc.current_view_time,'%Y-%m-%d') &lt;= sd.DATE and oc.del_flag = '0') as todayHandled
+        FROM
+        sys_dim_date sd
+        <where>
+            <if test="baseEntity.beginTime !=null and baseEntity.beginTime != '' and baseEntity.endTime !='' and baseEntity.endTime != null">
+                date_format(sd.DATE,'%Y-%m-%d') BETWEEN #{baseEntity.beginTime} AND #{baseEntity.endTime}
+            </if>
+        </where>
+        ORDER BY sd.date ASC
+    </select>
+
+
+</mapper>

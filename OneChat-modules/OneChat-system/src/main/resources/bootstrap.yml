@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  cloud:
+    nacos:
+      config:
+        namespace: 83f88f4b-1e6c-4402-929d-21409aaa9138
+        server-addr: 127.0.0.1:8848
+        file-extension: yml
+        config-retry-time: 300000
+        shared-configs[0]:
+          dataId: OneChat-Common.yml
+          refresh: true
+      discovery:
+        namespace: ${spring.cloud.nacos.config.namespace}
+        server-addr: ${spring.cloud.nacos.config.server-addr}
