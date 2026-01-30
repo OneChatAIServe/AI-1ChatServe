@@ -28,10 +28,7 @@ GitCode: https://gitcode.com/OneChatServe/1ChatServe
 ### 0.2 Frontend Repository
 Address： https://gitee.com/hixinla/1-chat-serve-front
 
-### 0.3 Online Demo
-Admin Panel: http://demo.aikf.chat (Account: admin , Password: admin123)
 
-User Experience End： http://mobile.aikf.chat
 
 
 ## 1. Project Background
