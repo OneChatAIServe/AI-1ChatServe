@@ -25,10 +25,9 @@
 ### 0.2 前端仓库
 - 地址：[https://gitee.com/hixinla/1-chat-serve-front](https://gitee.com/hixinla/1-chat-serve-front)
 
-### 0.3 在线演示
-   - 管理后台: [http://demo.aikf.chat](http://demo.aikf.chat) (账号：admin 密码：admin123)
-   - 用户体验端：[http://mobile.aikf.chat](http://mobile.aikf.chat)
-
+### 0.3 在线演示(可添加好友获取)
+<img src="img/wechat.png" alt="输入图片说明" width="250" height="auto" />
+ 
 ## 1. 项目背景
 
 在数字化转型的浪潮下，企业面临着诸多严峻挑战：
@@ -163,7 +162,7 @@
 1. **技术交流**：加入我们的技术交流群,与其他开发者交流技术经验，解决问题
 2. **商业合作**：商业合作机会，包括定制开发、技术支持、解决方案合作等
 
-<img src="img/wechat.jpg" alt="输入图片说明" width="300" height="auto" />
+<img src="img/wechat.png" alt="输入图片说明" width="300" height="auto" />
 
 ## 8. 许可证
 
