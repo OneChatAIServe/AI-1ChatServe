@@ -24,6 +24,8 @@ public class RuleFfServingUtils {
 
 
 
+
+
     /**
      * 绑定：规则 + 客服 + 访客
      */
@@ -57,6 +59,36 @@ public class RuleFfServingUtils {
         String key = OneChatCacheKeyConstants.ImKeyGenerator.getKfServingKey(webStyleId,kfRuleId,userAccount);
         return redisService.getHashSize(key); // 需要补充 getHashSize 方法（见下文）
     }
+
+
+    /**
+     * 用户上线时，记录用户所在节点(访客)
+     */
+    public void guestLogin(String userAccount,String nodeId,long expireTime) {
+        String key = OneChatCacheKeyConstants.ImKeyGenerator.getInstanceIdVisitor(nodeId,userAccount);
+        redisService.setCacheObject(key,userAccount,expireTime,TimeUnit.MINUTES);
+    }
+
+
+
+    /**
+     * 用户上线时，记录用户所在节点(客服)
+     */
+    public void userLogin(String userAccount,String nodeId,long expireTime) {
+        String key = OneChatCacheKeyConstants.ImKeyGenerator.getInstanceIdUser(nodeId,userAccount);
+        redisService.setCacheObject(key,userAccount,expireTime,TimeUnit.MINUTES);
+    }
+
+
+
+    /**
+     * 用户上线时，记录用户所在节点(客服)
+     */
+    public boolean userLoginOnline(String userAccount,String nodeId){
+        String key = OneChatCacheKeyConstants.ImKeyGenerator.getInstanceIdUser(nodeId,userAccount);
+       return redisService.hasKey(key);
+    }
+
 
 
     /**

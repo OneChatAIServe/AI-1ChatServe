@@ -5,4 +5,9 @@ public class CommonMqConstants {
     public static final String CHAT_MESSAGE_PRODUCER = "chatMessageProducer-out-0";
     //访客维护队列
     public static final String VISITOR_PRODUCER = "visitorProducer-out-0";
+
+    //TIO集群广播队列
+    public static final String TIO_COLONY_TOPIC="im.colony";
+
+
 }

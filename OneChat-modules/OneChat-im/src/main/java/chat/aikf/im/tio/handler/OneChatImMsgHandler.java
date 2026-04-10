@@ -3,17 +3,9 @@ package chat.aikf.im.tio.handler;
 
 
 
-import chat.aikf.common.core.constant.Constants;
-import chat.aikf.common.core.utils.StringUtils;
-import chat.aikf.common.mq.content.CommonMqConstants;
-import chat.aikf.im.mq.sender.MqSender;
+
 import chat.aikf.im.tio.constant.OneChatImConstant;
 import chat.aikf.im.tio.handler.strategy.ClientStrategyFactory;
-import chat.aikf.im.tio.model.GuestIdentityMsgDto;
-import chat.aikf.im.tio.model.OneChatMsgDto;
-import chat.aikf.im.tio.service.ChatMessageService;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,12 +14,8 @@ import org.tio.core.ChannelContext;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
 import org.tio.websocket.common.WsRequest;
-import org.tio.websocket.common.WsResponse;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 /**
  * @author tanyaowu
@@ -40,13 +28,6 @@ public class OneChatImMsgHandler implements IWsMsgHandler {
     @Autowired
     private ClientStrategyFactory clientStrategyFactory;
 
-
-    @Autowired
-    private ChatMessageService chatMessageService;
-
-
-    @Autowired
-    private MqSender mqSender;
 
 
 
@@ -106,6 +87,7 @@ public class OneChatImMsgHandler implements IWsMsgHandler {
      */
     @Override
     public Object onClose(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
+
         //关闭通道
         Tio.remove(channelContext, "receive close flag");
         //从指定的队列中移除相关的映射

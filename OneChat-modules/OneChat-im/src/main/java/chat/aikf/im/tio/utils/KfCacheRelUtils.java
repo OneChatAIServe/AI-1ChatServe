@@ -1,18 +1,15 @@
 package chat.aikf.im.tio.utils;
 
 
-import chat.aikf.common.core.config.OneChatConfig;
+import chat.aikf.common.core.config.OneChatProperties;
 import chat.aikf.common.core.constant.OneChatCacheKeyConstants;
 import chat.aikf.common.core.utils.SpringUtils;
 import chat.aikf.common.redis.service.RedisService;
+import chat.aikf.im.tio.config.TioClusterNodeProperties;
 import chat.aikf.im.tio.model.GuestIdentityMsgDto;
-import chat.aikf.ops.api.domain.OneChatKfVisitorMsg;
-import chat.aikf.ops.api.domain.OneChatkfVisitor;
 import chat.aikf.ops.api.utils.RuleFfServingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,7 +23,11 @@ public class KfCacheRelUtils {
     private RedisService redisService;
 
     @Autowired
-    private OneChatConfig oneChatConfig;
+    private OneChatProperties oneChatProperties;
+
+
+    @Autowired
+    private TioClusterNodeProperties tioClusterNodeProperties;
 
 
     @Autowired
@@ -38,21 +39,43 @@ public class KfCacheRelUtils {
      * @param msgDto
      * @param webStyleId
      */
-    public void linkInitCache(GuestIdentityMsgDto msgDto,String webStyleId){
-
+    public void linkInitGuestCache(GuestIdentityMsgDto msgDto,String webStyleId){
+        msgDto.setServiceNode(tioClusterNodeProperties.getCurrentNode());
         //连接kfSession数据
         String initKey = OneChatCacheKeyConstants.ImKeyGenerator.getInitVisitorSessionKey(msgDto.getVisitorId(),webStyleId);
-        redisService.setCacheObject(initKey,msgDto, oneChatConfig.sessionTime.longValue() , TimeUnit.MINUTES);
+        redisService.setCacheObject(initKey,msgDto, oneChatProperties.sessionTime.longValue() , TimeUnit.MINUTES);
 
 
         //构建指定样式规则下,客服与访客的连接关系
-        ruleFfServingUtils.bindVisitorToKf(webStyleId,msgDto.getKfRuleId(),msgDto.getReceptObjId(),msgDto.getVisitorId(),oneChatConfig.sessionTime.longValue());
+        ruleFfServingUtils.bindVisitorToKf(webStyleId,msgDto.getKfRuleId(),msgDto.getReceptObjId(),msgDto.getVisitorId(), oneChatProperties.sessionTime.longValue());
 
 
         //设置指定样式下的访客规则已经分配到了哪个员工
         String allocateKfKey = OneChatCacheKeyConstants.ImKeyGenerator.getCurrentRuleAllocateKfKey(webStyleId,msgDto.getKfRuleId());
         redisService.setCacheObject(allocateKfKey,msgDto.getReceptObjId());
+    }
 
+
+
+    /**
+     * 客服连接成功后设置的初始化缓存
+     * @param userAccount
+     */
+    public void linkInitUserCache(String userAccount){
+
+        String initKey = OneChatCacheKeyConstants.ImKeyGenerator.getInitUserSessionKey(userAccount);
+        redisService.setCacheObject(initKey,tioClusterNodeProperties.getCurrentNode(), oneChatProperties.sessionTime.longValue() , TimeUnit.MINUTES);
+    }
+
+
+    /**
+     * 客服连接成功后设置的初始化缓存-获取其缓存数据
+     * @param userAccount
+     */
+    public String findLinkInitUserCache(String userAccount){
+
+        String initKey = OneChatCacheKeyConstants.ImKeyGenerator.getInitUserSessionKey(userAccount);
+       return redisService.getCacheObject(initKey);
     }
 
 
@@ -85,7 +108,7 @@ public class KfCacheRelUtils {
         if(null != msgDto){
             msgDto.setInitState(1);
             msgDto.setVisitorMsg(null); //设置为空避免接入语重复
-            redisService.setCacheObject(initKey,msgDto, oneChatConfig.sessionTime.longValue() , TimeUnit.MINUTES);
+            redisService.setCacheObject(initKey,msgDto, oneChatProperties.sessionTime.longValue() , TimeUnit.MINUTES);
         }
 
     }

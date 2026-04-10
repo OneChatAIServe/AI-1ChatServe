@@ -1,13 +1,10 @@
 package chat.aikf.im.mq.listener;
 
-import chat.aikf.common.core.constant.SecurityConstants;
-import chat.aikf.common.core.utils.SpringUtils;
-import chat.aikf.common.security.utils.SecurityUtils;
+
+import chat.aikf.im.tio.model.BroadcastMsgDto;
 import chat.aikf.im.tio.model.IdentityMsgDto;
 import chat.aikf.im.tio.model.OneChatMsgDto;
 import chat.aikf.im.tio.service.ChatMessageService;
-import chat.aikf.ops.api.RemoteKfRuleService;
-import chat.aikf.ops.api.domain.OneChatkfVisitor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -66,5 +63,27 @@ public class ChatMessageListener {
             }
         };
     }
+
+    /**
+     * tio集群广播消息监听 -发送消息
+     * 此监听器会接收发送到广播主题的所有消息，适用于多实例部署场景
+     */
+    @Bean
+    public Consumer<BroadcastMsgDto> tioColonyConsumer() {
+
+        return message -> {
+            try {
+                log.info("tio集群广播消息监听 -发送消息"+message);
+
+//                chatMessageService.tioColonySendMessage(message);
+            } catch (Exception e) {
+                log.error("tio集群广播消息监听 -发送消息, BroadcastMsgDto={}", message, e);
+                throw new RuntimeException("tio集群广播消息监听 -发送消息", e); // 触发重试 → DLQ
+            }
+        };
+
+    }
+
+
 
 }

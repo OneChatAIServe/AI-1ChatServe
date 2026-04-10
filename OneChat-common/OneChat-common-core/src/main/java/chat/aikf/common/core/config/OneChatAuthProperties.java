@@ -6,7 +6,7 @@ import java.util.List;
 
 @Component
 @ConfigurationProperties(prefix = "one-chat.auth")
-public class OneChatAuthConfig {
+public class OneChatAuthProperties {
 
     private List<String> allowedDomains;
 

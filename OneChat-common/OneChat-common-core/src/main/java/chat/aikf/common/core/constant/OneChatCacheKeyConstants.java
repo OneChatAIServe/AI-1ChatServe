@@ -17,7 +17,27 @@ public class OneChatCacheKeyConstants {
         /**
          * 访客初始化会话标识
          */
-        public static final String INIT_VISITOR_SESSION=  Module.IM+":init:visitor:%s:%s";
+        public static final String INIT_VISITOR_SESSION=  Module.IM+"init:visitorSession:styleId:%:%s:%s";
+
+
+        /**
+         * 客服初始化会话标识
+         */
+        public static final String INIT_USER_SESSION=  Module.IM+"init:userSession:%s";
+
+
+
+        /**
+         * 访客与实列节点
+         */
+        public static final String INSTANCEID_VISITOR=  Module.IM+"instanceId:visitor:%s:%s";
+
+
+
+        /**
+         * 访客与实列节点
+         */
+        public static final String INSTANCEID_USER=  Module.IM+"instanceId:user:%s:%s";
 
         /**
          * 客服组规则缓存
@@ -56,15 +76,53 @@ public class OneChatCacheKeyConstants {
 
 
         /**
-         * 获取访客会话初始化标识
-         * @param visitorId
-         * @param kfRuleId
+         * tio链接账号节点与账号缓存key(员工账号)
+         * @param instanceId
+         * @param userAccount
          * @return
          */
-        public static String getInitVisitorSessionKey(String visitorId, String kfRuleId){
+        public static String getInstanceIdUser(String instanceId,String userAccount){
 
-            return String.format(ImCacheKey.INIT_VISITOR_SESSION, visitorId,kfRuleId);
+            return String.format(ImCacheKey.INSTANCEID_USER, instanceId,userAccount);
+
         }
+
+
+
+        /**
+         * tio链接账号节点与账号缓存key（访客账号）
+         * @param instanceId
+         * @param userAccount
+         * @return
+         */
+        public static String getInstanceIdVisitor(String instanceId,String userAccount){
+
+            return String.format(ImCacheKey.INSTANCEID_VISITOR, instanceId,userAccount);
+
+        }
+
+        /**
+         * 获取访客会话初始化标识
+         * @param visitorId
+         * @param webStyleId
+         * @return
+         */
+        public static String getInitVisitorSessionKey(String visitorId, String webStyleId){
+
+            return String.format(ImCacheKey.INIT_VISITOR_SESSION, visitorId,webStyleId);
+        }
+
+
+        /**
+         * 获取访客会话初始化标识
+         * @param userAccount
+         * @return
+         */
+        public static String getInitUserSessionKey(String userAccount){
+
+            return String.format(ImCacheKey.INIT_USER_SESSION, userAccount);
+        }
+
 
 
         /**

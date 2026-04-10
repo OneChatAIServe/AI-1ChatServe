@@ -2,6 +2,7 @@ package chat.aikf.im.mq.sender;
 
 
 
+import chat.aikf.common.mq.content.CommonMqConstants;
 import chat.aikf.common.mq.producer.MqTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,4 +31,17 @@ public class MqSender {
     public void sendMsg(String bindingName, Object message, java.util.Map<String, Object> headers) {
         mqTemplate.send(bindingName, message, headers);
     }
+
+
+    /**
+     * 发送广播通知所有im节点
+     * @param message
+     */
+    public void broadcastMessage(Object message){
+        mqTemplate.send(CommonMqConstants.TIO_COLONY_TOPIC, message);
+    }
+
+
+
+
 }

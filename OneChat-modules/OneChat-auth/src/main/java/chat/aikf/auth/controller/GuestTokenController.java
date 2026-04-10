@@ -1,29 +1,20 @@
 package chat.aikf.auth.controller;
 
 import chat.aikf.auth.form.GuestLoginBody;
-import chat.aikf.common.core.config.OneChatAuthConfig;
-import chat.aikf.common.core.config.OneChatConfig;
+import chat.aikf.common.core.config.OneChatAuthProperties;
+import chat.aikf.common.core.config.OneChatProperties;
 import chat.aikf.common.core.constant.Constants;
-import chat.aikf.common.core.constant.SecurityConstants;
 import chat.aikf.common.core.domain.R;
-import chat.aikf.common.core.utils.NonceUtils;
 import chat.aikf.common.core.utils.SecureIdUtils;
-import chat.aikf.common.core.utils.StringUtils;
 import chat.aikf.common.security.service.GuestIdentityService;
-import chat.aikf.common.security.utils.SecurityUtils;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -42,11 +33,11 @@ public class GuestTokenController {
 
 
     @Autowired
-    private OneChatConfig chatConfig;
+    private OneChatProperties chatConfig;
 
 
     @Autowired
-    private OneChatAuthConfig oneChatAuthConfig;
+    private OneChatAuthProperties oneChatAuthProperties;
 
     @Autowired
     private GuestIdentityService guestIdentityService;
@@ -62,7 +53,7 @@ public class GuestTokenController {
     @GetMapping("/identify")
     public R<Map<String, Object>> identifyGuest(HttpServletRequest request) {
 
-        if (!isValidReferer(request,oneChatAuthConfig.getAllowedDomains())) {
+        if (!isValidReferer(request, oneChatAuthProperties.getAllowedDomains())) {
             return R.fail(403,"域名未授权");
         }
 
@@ -83,7 +74,7 @@ public class GuestTokenController {
     public R<Map<String, Object>> createSession(@Valid @RequestBody GuestLoginBody guestLoginBody, HttpServletRequest request) {
 
 
-        if (!isValidReferer(request,oneChatAuthConfig.getAllowedDomains())) {
+        if (!isValidReferer(request, oneChatAuthProperties.getAllowedDomains())) {
             return R.fail(403,"域名未授权");
         }
 

@@ -89,6 +89,12 @@ public class GuestIdentityMsgDto {
 
 
     /**
+     * 服务的节点id
+     */
+    private String serviceNode;
+
+
+    /**
      * 消息内容
      */
     private  OneChatKfVisitorMsg visitorMsg;

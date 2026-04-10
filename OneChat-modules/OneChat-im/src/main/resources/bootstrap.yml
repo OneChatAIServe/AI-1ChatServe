@@ -19,3 +19,7 @@ spring:
       discovery:
         namespace: ${spring.cloud.nacos.config.namespace}
         server-addr: ${spring.cloud.nacos.config.server-addr}
+one-chat:
+  tio:
+    node:
+      current-node: im-node-01
